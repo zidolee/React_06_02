@@ -1,5 +1,6 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
+import articleListReducer from './articleListReducer'
 
 //store를 생성하는 함수를 정의
 
@@ -16,6 +17,7 @@ export function configureStore() {
         ) :
         middleware
     return createStore(combineReducers({
+        articleList: articleListReducer,
 
     }), composed);  //createStore(reducer, middleware)
 }
