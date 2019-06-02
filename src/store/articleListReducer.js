@@ -1,10 +1,8 @@
 import axios from 'axios';
 import {createAction, handleActions} from 'redux-actions'
-const GET_ARTICLE_LIST_REQUEST = 'GET_ARTICLE_LIST_REQUEST';
-const GET_ARTICLE_LIST_SUCCESS = 'GET_ARTICLE_LIST_SUCCESS';
-const GET_ARTICLE_LIST_FAILED = 'GET_ARTICLE_LIST_FAILED';
+import * as ActionTypes  from './actionTypes'
 
-const getArticleListRequest = createAction(GET_ARTICLE_LIST_REQUEST);
+const getArticleListRequest = createAction(ActionTypes.GET_ARTICLE_LIST_REQUEST);
 // function getArticleListRequest() {
 //     return {
 //         type: GET_ARTICLE_LIST_REQUEST,
@@ -12,7 +10,7 @@ const getArticleListRequest = createAction(GET_ARTICLE_LIST_REQUEST);
 //     }
 // }
 
-const getArticleListSuccess = createAction(GET_ARTICLE_LIST_SUCCESS);
+const getArticleListSuccess = createAction(ActionTypes.GET_ARTICLE_LIST_SUCCESS);
 // 썜은 전자가 나은것 같음
 // const getArticleListSuccess = createAction(GET_ARTICLE_LIST_SUCCESS, (data) => {
 //     return {
@@ -28,7 +26,7 @@ const getArticleListSuccess = createAction(GET_ARTICLE_LIST_SUCCESS);
 //         }
 //     }
 // }
-const getArticleListFailed = createAction(GET_ARTICLE_LIST_FAILED);
+const getArticleListFailed = createAction(ActionTypes.GET_ARTICLE_LIST_FAILED);
 // const getArticleListFailed = createAction(GET_ARTICLE_LIST_FAILED, (error) => {
 //     return {
 //         error : error
@@ -59,12 +57,9 @@ export function getArticleList() {
     }
 }
 
-//delete
-const DELETE_ARTICLE_LIST_REQUEST = 'DELETE_ARTICLE_LIST_REQUEST';
-const DELETE_ARTICLE_LIST_SUCCESS = 'DELETE_ARTICLE_LIST_SUCCESS';
-const DELETE_ARTICLE_LIST_FAILED = 'DELETE_ARTICLE_LIST_FAILED';
 
-const deleteArticleListRequest = createAction(DELETE_ARTICLE_LIST_REQUEST);
+
+const deleteArticleListRequest = createAction(ActionTypes.DELETE_ARTICLE_LIST_REQUEST);
 // function deleteArticleListRequest() {
 //     return {
 //         type: DELETE_ARTICLE_LIST_REQUEST,
@@ -72,7 +67,7 @@ const deleteArticleListRequest = createAction(DELETE_ARTICLE_LIST_REQUEST);
 //     }
 // }
 
-const deleteArticleListSuccess = createAction(DELETE_ARTICLE_LIST_SUCCESS);
+const deleteArticleListSuccess = createAction(ActionTypes.DELETE_ARTICLE_LIST_SUCCESS);
 // function deleteArticleListSuccess(deleteId) {
 //     return {
 //         type: DELETE_ARTICLE_LIST_SUCCESS,
@@ -82,7 +77,7 @@ const deleteArticleListSuccess = createAction(DELETE_ARTICLE_LIST_SUCCESS);
 //     }
 // }
 
-const deleteArticleListFailed = createAction(DELETE_ARTICLE_LIST_FAILED);
+const deleteArticleListFailed = createAction(ActionTypes.DELETE_ARTICLE_LIST_FAILED);
 // function deleteArticleListFailed(error) {
 //     return {
 //         type: DELETE_ARTICLE_LIST_FAILED,
@@ -118,40 +113,41 @@ const initialState = {
 }
 
 export default handleActions({
-    GET_ARTICLE_LIST_REQUEST : (state, {payload}) => {
+    //변수를 키값으로 쓸떄 []
+    [ActionTypes.GET_ARTICLE_LIST_REQUEST] : (state, {payload}) => {
         return Object.assign({}, state, {
                 isLoading: true,
                 isSuccess : false,
                 isFailed :false,
             })
-    },GET_ARTICLE_LIST_SUCCESS : (state, {payload}) => {
+    },[ActionTypes.GET_ARTICLE_LIST_SUCCESS] : (state, {payload}) => {
         return Object.assign({}, state, {
             isLoading: false,
             isSuccess : true,
             isFailed :false,
             list: [...payload.data]
         })
-    },GET_ARTICLE_LIST_FAILED : (state, {payload}) => {
+    },[ActionTypes.GET_ARTICLE_LIST_FAILED] : (state, {payload}) => {
         return Object.assign({}, state, {
             isLoading: false,
             isSuccess : false,
             isFailed :true,
             error: payload.error
         })
-    },DELETE_ARTICLE_LIST_REQUEST : (state, {payload}) => {
+    },[ActionTypes.DELETE_ARTICLE_LIST_REQUEST] : (state, {payload}) => {
         return Object.assign({}, state, {
             isLoading: true,
             isSuccess : false,
             isFailed :false,
         })
-    },DELETE_ARTICLE_LIST_SUCCESS : (state, {payload}) => {
+    },[ActionTypes.DELETE_ARTICLE_LIST_SUCCESS] : (state, {payload}) => {
         return Object.assign({}, state, {
             isLoading: false,
             isSuccess : true,
             isFailed :false,
             list: [...payload.data]
         })
-    },DELETE_ARTICLE_LIST_FAILED : (state, {payload}) => {
+    },[ActionTypes.DELETE_ARTICLE_LIST_FAILED] : (state, {payload}) => {
         return Object.assign({}, state, {
             isLoading: false,
             isSuccess : false,
