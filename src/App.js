@@ -8,7 +8,7 @@ class App extends Component {
 
   onSend= () => {
     console.log('on send')
-    this.props.getArticleList();
+    this.props.articleListActions.getArticleList();
   }
 
  render() {
