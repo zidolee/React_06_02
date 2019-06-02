@@ -1,8 +1,21 @@
-import axios from 'axios';
+// import axios from 'axios';
 import {createAction, handleActions} from 'redux-actions'
 import * as ActionTypes  from './actionTypes'
+import {pender} from 'redux-pender'
+import * as ArticleServiceAPI from '../store/infra/api/ArticeServiceAPI'
+                                                                            //promise함수
+export const getArticleList = createAction(ActionTypes.GET_ARTICLE_LIST, ArticleServiceAPI.getArticleListAPI)
 
-const getArticleListRequest = createAction(ActionTypes.GET_ARTICLE_LIST_REQUEST);
+// function getArticleListAPI() {
+//     return axios.get('https://us-central1-react-board-60426.cloudfunctions.net/articles')
+//         //응답 성공
+//         .then((response) => {
+//             return response.data
+//         })
+// }
+
+
+// const getArticleListRequest = createAction(ActionTypes.GET_ARTICLE_LIST_REQUEST);
 // function getArticleListRequest() {
 //     return {
 //         type: GET_ARTICLE_LIST_REQUEST,
@@ -10,7 +23,7 @@ const getArticleListRequest = createAction(ActionTypes.GET_ARTICLE_LIST_REQUEST)
 //     }
 // }
 
-const getArticleListSuccess = createAction(ActionTypes.GET_ARTICLE_LIST_SUCCESS);
+// const getArticleListSuccess = createAction(ActionTypes.GET_ARTICLE_LIST_SUCCESS);
 // 썜은 전자가 나은것 같음
 // const getArticleListSuccess = createAction(GET_ARTICLE_LIST_SUCCESS, (data) => {
 //     return {
@@ -26,7 +39,7 @@ const getArticleListSuccess = createAction(ActionTypes.GET_ARTICLE_LIST_SUCCESS)
 //         }
 //     }
 // }
-const getArticleListFailed = createAction(ActionTypes.GET_ARTICLE_LIST_FAILED);
+// const getArticleListFailed = createAction(ActionTypes.GET_ARTICLE_LIST_FAILED);
 // const getArticleListFailed = createAction(GET_ARTICLE_LIST_FAILED, (error) => {
 //     return {
 //         error : error
@@ -41,25 +54,25 @@ const getArticleListFailed = createAction(ActionTypes.GET_ARTICLE_LIST_FAILED);
 //     }
 // }
 
-export function getArticleList() {
-    return (dispatch) => {
-        dispatch(getArticleListRequest())
-        axios.get('https://us-central1-react-board-60426.cloudfunctions.net/articles')
-        //응답 성공
-        .then((response) => {
-            return response.data
-        }).then((data) => {
-            dispatch(getArticleListSuccess({data:data}))
-        }).catch((error) => {
-            console.log(error)
-            dispatch(getArticleListFailed({error :new Error('get article list failed')}))
-        })
-    }
-}
+// export function getArticleList() {
+//     return (dispatch) => {
+//         dispatch(getArticleListRequest())
+//         axios.get('https://us-central1-react-board-60426.cloudfunctions.net/articles')
+//         //응답 성공
+//         .then((response) => {
+//             return response.data
+//         }).then((data) => {
+//             dispatch(getArticleListSuccess({data:data}))
+//         }).catch((error) => {
+//             console.log(error)
+//             dispatch(getArticleListFailed({error :new Error('get article list failed')}))
+//         })
+//     }
+// }
 
 
 
-const deleteArticleListRequest = createAction(ActionTypes.DELETE_ARTICLE_LIST_REQUEST);
+// const deleteArticleListRequest = createAction(ActionTypes.DELETE_ARTICLE_LIST_REQUEST);
 // function deleteArticleListRequest() {
 //     return {
 //         type: DELETE_ARTICLE_LIST_REQUEST,
@@ -67,7 +80,7 @@ const deleteArticleListRequest = createAction(ActionTypes.DELETE_ARTICLE_LIST_RE
 //     }
 // }
 
-const deleteArticleListSuccess = createAction(ActionTypes.DELETE_ARTICLE_LIST_SUCCESS);
+// const deleteArticleListSuccess = createAction(ActionTypes.DELETE_ARTICLE_LIST_SUCCESS);
 // function deleteArticleListSuccess(deleteId) {
 //     return {
 //         type: DELETE_ARTICLE_LIST_SUCCESS,
@@ -77,7 +90,7 @@ const deleteArticleListSuccess = createAction(ActionTypes.DELETE_ARTICLE_LIST_SU
 //     }
 // }
 
-const deleteArticleListFailed = createAction(ActionTypes.DELETE_ARTICLE_LIST_FAILED);
+// const deleteArticleListFailed = createAction(ActionTypes.DELETE_ARTICLE_LIST_FAILED);
 // function deleteArticleListFailed(error) {
 //     return {
 //         type: DELETE_ARTICLE_LIST_FAILED,
@@ -87,19 +100,27 @@ const deleteArticleListFailed = createAction(ActionTypes.DELETE_ARTICLE_LIST_FAI
 //     }
 // }
 
-export function deleteArticle(id) {
-    return (dispatch) => {
-        dispatch(deleteArticleListRequest())
-        Promise.resolve('delete')
-        //응답 성공
-        .then((result) => {
-            // result === 'delete'
-            return   dispatch(deleteArticleListSuccess({id:id}))
-        }).catch((error) => {
-            dispatch(deleteArticleListFailed({error :new Error('get article list failed')}))
-        })
-    }
-}
+export const deleteArticle = createAction(ActionTypes.DELETE_ARTICLE_LIST, ArticleServiceAPI.deleteArticleAPI)
+
+// function deleteArticleAPI(id) {
+//     return Promise.resolve('delete').then(() => {
+//             return id
+//     })
+// }
+
+// export function deleteArticle(id) {
+//     return (dispatch) => {
+//         dispatch(deleteArticleListRequest())
+//         Promise.resolve('delete')
+//         //응답 성공
+//         .then((result) => {
+//             // result === 'delete'
+//             return   dispatch(deleteArticleListSuccess({id:id}))
+//         }).catch((error) => {
+//             dispatch(deleteArticleListFailed({error :new Error('get article list failed')}))
+//         })
+//     }
+// }
 //update
 
 //add
@@ -113,48 +134,75 @@ const initialState = {
 }
 
 export default handleActions({
-    //변수를 키값으로 쓸떄 []
-    [ActionTypes.GET_ARTICLE_LIST_REQUEST] : (state, {payload}) => {
-        return Object.assign({}, state, {
-                isLoading: true,
-                isSuccess : false,
-                isFailed :false,
+    ...pender({
+        type:ActionTypes.GET_ARTICLE_LIST,
+        onSuccess : (state, {payload}) => {
+            return Object.assign({}, state, {
+                list:payload
             })
-    },[ActionTypes.GET_ARTICLE_LIST_SUCCESS] : (state, {payload}) => {
-        return Object.assign({}, state, {
-            isLoading: false,
-            isSuccess : true,
-            isFailed :false,
-            list: [...payload.data]
-        })
-    },[ActionTypes.GET_ARTICLE_LIST_FAILED] : (state, {payload}) => {
-        return Object.assign({}, state, {
-            isLoading: false,
-            isSuccess : false,
-            isFailed :true,
-            error: payload.error
-        })
-    },[ActionTypes.DELETE_ARTICLE_LIST_REQUEST] : (state, {payload}) => {
-        return Object.assign({}, state, {
-            isLoading: true,
-            isSuccess : false,
-            isFailed :false,
-        })
-    },[ActionTypes.DELETE_ARTICLE_LIST_SUCCESS] : (state, {payload}) => {
-        return Object.assign({}, state, {
-            isLoading: false,
-            isSuccess : true,
-            isFailed :false,
-            list: [...payload.data]
-        })
-    },[ActionTypes.DELETE_ARTICLE_LIST_FAILED] : (state, {payload}) => {
-        return Object.assign({}, state, {
-            isLoading: false,
-            isSuccess : false,
-            isFailed :true,
-            error: payload.error
-        })
-    }
+        },
+        onFailure : (state, {payload}) => {
+            return Object.assign({}, state, {
+                error:payload
+            })
+        }
+    }),
+    ...pender({
+        type:ActionTypes.DELETE_ARTICLE_LIST,
+        onSuccess : (state, {payload}) => {
+            return Object.assign({}, state, {
+                list:payload
+            })
+        },
+        onFailure : (state, {payload}) => {
+            return Object.assign({}, state, {
+                error:payload
+            })
+        }
+    }),
+    //변수를 키값으로 쓸떄 []
+    // [ActionTypes.GET_ARTICLE_LIST_REQUEST] : (state, {payload}) => {
+    //     return Object.assign({}, state, {
+    //             isLoading: true,
+    //             isSuccess : false,
+    //             isFailed :false,
+    //         })
+    // },[ActionTypes.GET_ARTICLE_LIST_SUCCESS] : (state, {payload}) => {
+    //     return Object.assign({}, state, {
+    //         isLoading: false,
+    //         isSuccess : true,
+    //         isFailed :false,
+    //         list: [...payload.data]
+    //     })
+    // },[ActionTypes.GET_ARTICLE_LIST_FAILED] : (state, {payload}) => {
+    //     return Object.assign({}, state, {
+    //         isLoading: false,
+    //         isSuccess : false,
+    //         isFailed :true,
+    //         error: payload.error
+    //     })
+    // },
+    // [ActionTypes.DELETE_ARTICLE_LIST_REQUEST] : (state, {payload}) => {
+    //     return Object.assign({}, state, {
+    //         isLoading: true,
+    //         isSuccess : false,
+    //         isFailed :false,
+    //     })
+    // },[ActionTypes.DELETE_ARTICLE_LIST_SUCCESS] : (state, {payload}) => {
+    //     return Object.assign({}, state, {
+    //         isLoading: false,
+    //         isSuccess : true,
+    //         isFailed :false,
+    //         list: [...payload.data]
+    //     })
+    // },[ActionTypes.DELETE_ARTICLE_LIST_FAILED] : (state, {payload}) => {
+    //     return Object.assign({}, state, {
+    //         isLoading: false,
+    //         isSuccess : false,
+    //         isFailed :true,
+    //         error: payload.error
+    //     })
+    // }
 }, initialState)
 
 // export default function articleListReducer(state = {
