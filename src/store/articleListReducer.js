@@ -44,6 +44,53 @@ export function getArticleList() {
     }
 }
 
+//delete
+const DELETE_ARTICLE_LIST_REQUEST = 'DELETE_ARTICLE_LIST_REQUEST';
+const DELETE_ARTICLE_LIST_SUCCESS = 'DELETE_ARTICLE_LIST_SUCCESS';
+const DELETE_ARTICLE_LIST_FAILED = 'DELETE_ARTICLE_LIST_FAILED';
+
+function deleteArticleListRequest() {
+    return {
+        type: DELETE_ARTICLE_LIST_REQUEST,
+        payload : null
+    }
+}
+
+function deleteArticleListSuccess(deleteId) {
+    return {
+        type: DELETE_ARTICLE_LIST_SUCCESS,
+        payload : {
+            deleteId: deleteId
+        }
+    }
+}
+
+function deleteArticleListFailed(error) {
+    return {
+        type: DELETE_ARTICLE_LIST_FAILED,
+        payload : {
+            error :error
+        }
+    }
+}
+
+export function deleteArticle(id) {
+    return (dispatch) => {
+        dispatch(deleteArticleListRequest())
+        Promise.resolve('delete')
+        //응답 성공
+        .then((result) => {
+            // result === 'delete'
+            return   dispatch(deleteArticleListSuccess(id))
+        }).catch((error) => {
+            dispatch(deleteArticleListFailed(new Error('delete article list failed')))
+        })
+    }
+}
+//update
+
+//add
+
 
 export default function articleListReducer(state = {
     isLoading: false,
@@ -67,6 +114,26 @@ export default function articleListReducer(state = {
                     list: [...payload.data]
                 })
         case GET_ARTICLE_LIST_FAILED:
+                return Object.assign({}, state, {
+                    isLoading: false,
+                    isSuccess : false,
+                    isFailed :true,
+                    error: payload.error
+                })
+        case DELETE_ARTICLE_LIST_REQUEST:
+                return Object.assign({}, state, {
+                    isLoading: true,
+                    isSuccess : false,
+                    isFailed :false,
+                })
+        case DELETE_ARTICLE_LIST_SUCCESS:
+                return Object.assign({}, state, {
+                    isLoading: false,
+                    isSuccess : true,
+                    isFailed :false,
+                    list: [...payload.data]
+                })
+        case DELETE_ARTICLE_LIST_FAILED:
                 return Object.assign({}, state, {
                     isLoading: false,
                     isSuccess : false,

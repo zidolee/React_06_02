@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {getArticleList} from './store/articleListReducer'
+import {getArticleList, deleteArticle} from './store/articleListReducer'
 
 class App extends Component {
 
@@ -53,7 +53,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getArticleList : () => dispatch(getArticleList())
+    getArticleList : () => dispatch(getArticleList()),
+    deleteArticle: (id) => dispatch(deleteArticle(id)),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(App);
